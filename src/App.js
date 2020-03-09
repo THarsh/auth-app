@@ -5,7 +5,7 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <h1>dsa</h1>
+      <h1>JWT AUTH</h1>
     </div>
   );
 }
