@@ -1,8 +1,6 @@
 import decode from 'jwt-decode';
-
-
-export default class AuthService{
-    constructor (domain){
+export default class AuthService {
+    constructor(domain) {
         this.domain = domain || 'http://localhost:8080'
         this.fetch = this.fetch.bind(this)
         this.login = this.login.bind(this)
@@ -21,35 +19,6 @@ export default class AuthService{
             this.setToken(res.token)
             return Promise.resolve(res);
         })
-    }
-
-    fetch(url, options) {
-        // performs api calls sending the required authentication headers
-        const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-
-        if (this.loggedIn()) {
-            headers['Authorization'] = 'Bearer ' + this.getToken()
-        }
-
-        return fetch(url, {
-            headers,
-            ...options
-        })
-            .then(this._checkStatus)
-            .then(response => response.json())
-    }
-
-    setToken(idToken) {
-        // Saves user token to localStorage
-        localStorage.setItem('id_token', idToken)
-    }
-
-    getToken() {
-        // Retrieves the user token from localStorage
-        return localStorage.getItem('id_token')
     }
 
     loggedIn() {
@@ -72,6 +41,16 @@ export default class AuthService{
         }
     }
 
+    setToken(idToken) {
+        // Saves user token to localStorage
+        localStorage.setItem('id_token', idToken)
+    }
+
+    getToken() {
+        // Retrieves the user token from localStorage
+        return localStorage.getItem('id_token')
+    }
+
     logout() {
         // Clear user token and profile data from localStorage
         localStorage.removeItem('id_token');
@@ -79,6 +58,26 @@ export default class AuthService{
 
     getProfile() {
         return decode(this.getToken());
+    }
+
+
+    fetch(url, options) {
+        // performs api calls sending the required authentication headers
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+
+        if (this.loggedIn()) {
+            headers['Authorization'] = 'Bearer ' + this.getToken()
+        }
+
+        return fetch(url, {
+            headers,
+            ...options
+        })
+            .then(this._checkStatus)
+            .then(response => response.json())
     }
 
     _checkStatus(response) {
@@ -91,6 +90,4 @@ export default class AuthService{
             throw error
         }
     }
-    
-
 }

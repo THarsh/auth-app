@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './Login.css';
 import AuthService from './AuthService';
- 
 
 class Login extends Component {
     constructor(){
@@ -9,20 +8,17 @@ class Login extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.Auth = new AuthService();
-         
     }
-
     componentWillMount(){
         if(this.Auth.loggedIn())
             this.props.history.replace('/');
     }
-     
     render() {
         return (
             <div className="center">
                 <div className="card">
                     <h1>Login</h1>
-                    <form>
+                    <form onSubmit={this.handleFormSubmit}>
                         <input
                             className="form-item"
                             placeholder="Username goes here..."
